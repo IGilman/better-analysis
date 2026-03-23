@@ -5,23 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Better Home & Finance — AI Mentions & Headcount in Earnings Calls</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap');
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #0a0b0e;
-    --surface: #12141a;
-    --border: #1e2130;
-    --accent: #00d4ff;
-    --accent2: #a78bfa;
-    --gpt-color: #19c37d;
-    --text: #e8eaf0;
-    --muted: #6b7280;
+    --bg: #f8f8fa;
+    --surface: #ffffff;
+    --border: #e5e7eb;
+    --accent: #3b7dd8;
+    --accent2: #e07a3a;
+    --accent3: #7c5bbf;
+    --gpt-color: #16a34a;
+    --text: #1e293b;
+    --muted: #64748b;
+    --light-muted: #94a3b8;
   }
 
   body {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Inter', sans-serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
@@ -41,7 +43,7 @@
 
   h1 { font-size: clamp(22px, 4vw, 44px); font-weight: 800; line-height: 1.1; margin-bottom: 12px; }
   h1 .a { color: var(--accent); }
-  h1 .b { color: var(--accent2); }
+  h1 .b { color: var(--accent3); }
 
   .subtitle { font-size: 15px; color: var(--muted); max-width: 680px; line-height: 1.6; font-weight: 400; }
 
@@ -66,7 +68,7 @@
 
   .stat-a .stat-num { color: var(--accent); }
   .stat-b .stat-num { color: var(--gpt-color); }
-  .stat-c .stat-num { color: var(--accent2); }
+  .stat-c .stat-num { color: var(--accent3); }
 
   .section-header {
     max-width: 1100px;
@@ -110,8 +112,8 @@
     transition: border-color 0.15s;
   }
 
-  .qcard:hover { border-color: #2e3350; }
-  .t-ai.qcard:hover { border-color: rgba(0,212,255,0.35); }
+  .qcard:hover { border-color: #cbd5e1; }
+  .t-ai.qcard:hover { border-color: rgba(59,125,216,0.4); }
 
   .card-hdr {
     display: flex;
@@ -125,7 +127,7 @@
   .card-lbl { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 4px; }
   .card-cnt { font-size: 28px; font-weight: 800; }
   .t-ai .card-cnt { color: var(--accent); }
-  .zero .card-cnt { color: var(--muted) !important; }
+  .zero .card-cnt { color: var(--light-muted) !important; }
 
   .bar-bg { height: 3px; background: var(--border); border-radius: 4px; margin-top: 8px; overflow: hidden; }
   .bar-fill { height: 100%; border-radius: 4px; }
@@ -139,7 +141,7 @@
 
   .mention {
     font-size: 13px;
-    color: #b0b8cc;
+    color: #475569;
     line-height: 1.65;
     padding: 10px 0;
     border-bottom: 1px solid var(--border);
@@ -148,7 +150,7 @@
   .mention:last-child { border-bottom: none; padding-bottom: 0; }
 
   mark { border-radius: 3px; padding: 0 2px; font-weight: 600; }
-  .t-ai mark { background: rgba(0,212,255,0.15); color: var(--accent); }
+  .t-ai mark { background: rgba(59,125,216,0.1); color: var(--accent); }
 
   /* Mobile */
   @media (max-width: 700px) {
@@ -175,11 +177,11 @@
     right: 18px;
     z-index: 999;
     display: flex;
-    background: #12141a;
-    border: 1px solid #1e2130;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
   }
 
   .vtab {
@@ -191,124 +193,207 @@
     cursor: pointer;
     border: none;
     background: transparent;
-    color: #6b7280;
+    color: #64748b;
     transition: all 0.2s;
     white-space: nowrap;
   }
 
   .vtab.active {
-    background: #1e2130;
-    color: #00d4ff;
+    background: #eef4fb;
+    color: #3b7dd8;
   }
 
-  .vtab:hover:not(.active) { color: #b0b8cc; }
+  .vtab:hover:not(.active) { color: #1e293b; }
 
   /* Views */
   #view-analysis { display: block; }
   #view-explainer { display: none; }
 
-  /* Explainer embed styles */
+  /* Explainer / Unit Economics view — full-width layout like main page */
   #view-explainer {
-    min-height: 100vh;
     display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 80px 16px 40px;
+    padding-top: 60px;
   }
 
   #view-explainer.visible {
-    display: flex;
-    flex-direction: column;
+    display: block;
   }
 
-  .exp-card {
-    width: 100%;
-    max-width: 560px;
-    background: #12141a;
-    border: 1px solid #1e2130;
-    border-radius: 16px;
-    overflow: hidden;
+  .exp-header { max-width: 960px; margin: 0 auto 48px; }
+  .exp-header h1 { font-size: clamp(24px, 3.5vw, 38px); font-weight: 800; line-height: 1.15; margin-bottom: 14px; color: var(--text); }
+  .exp-header h1 .a { color: var(--accent); }
+  .exp-header .subtitle { font-size: 15px; color: var(--muted); max-width: 640px; line-height: 1.7; font-weight: 400; }
+
+  .exp-stats-row {
+    max-width: 960px;
+    margin: 0 auto 36px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
   }
 
-  .exp-section { padding: 20px 28px; border-bottom: 1px solid #1e2130; }
-  .exp-section:last-child { border-bottom: none; }
-  .exp-section-label {
+  .exp-stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+  }
+
+  .exp-stat-label {
     font-family: 'DM Mono', monospace;
-    font-size: 10px;
+    font-size: 11px;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: #6b7280;
-    margin-bottom: 10px;
+    color: var(--muted);
+    margin-bottom: 8px;
   }
 
-  .exp-takeaway {
-    padding: 18px 28px;
-    background: rgba(25,195,125,0.04);
-    border-bottom: 1px solid rgba(25,195,125,0.12);
+  .exp-stat-num { font-size: 32px; font-weight: 800; line-height: 1; }
+  .exp-stat-sub { font-size: 12px; color: var(--muted); margin-top: 6px; font-weight: 400; line-height: 1.5; }
+
+  .exp-section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
   }
-  .exp-takeaway-text { font-size: 14px; line-height: 1.6; color: #b0b8cc; }
-  .exp-takeaway-text strong { color: #19c37d; }
+
+  .exp-takeaway-card {
+    max-width: 960px;
+    margin: 0 auto 36px;
+    padding: 24px 32px;
+    background: rgba(22,163,74,0.04);
+    border: 1px solid rgba(22,163,74,0.15);
+    border-radius: 12px;
+  }
+  .exp-takeaway-text { font-size: 16px; line-height: 1.7; color: #475569; }
+  .exp-takeaway-text strong { color: #16a34a; font-weight: 700; }
+
+  .exp-breakdown {
+    max-width: 960px;
+    margin: 0 auto 36px;
+  }
 
   .exp-metrics {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
   }
 
   .exp-metric {
-    background: #0d0f14;
-    border: 1px solid #1e2130;
-    border-radius: 10px;
-    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
   }
 
   .exp-metric-label {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
-    color: #6b7280;
-    margin-bottom: 4px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
   }
 
   .exp-metric-value {
-    font-size: 22px;
+    font-size: 28px;
     font-weight: 800;
     line-height: 1;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
   }
 
-  .exp-metric-value.cyan  { color: #e8eaf0; }
-  .exp-metric-value.purple { color: #a78bfa; }
-  .exp-metric-value.green  { color: #19c37d; }
+  .exp-metric-value.default { color: var(--text); }
+  .exp-metric-value.purple { color: #7c5bbf; }
+  .exp-metric-value.green  { color: #16a34a; }
 
-  .exp-metric-desc { font-size: 12px; color: #6b7280; line-height: 1.5; }
+  .exp-metric-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
 
-  .exp-margin-section { padding: 20px 28px; border-bottom: 1px solid #1e2130; }
+  .exp-margin-card {
+    max-width: 960px;
+    margin: 0 auto 36px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+  }
+
   .exp-margin-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-  .exp-margin-label { font-size: 13px; color: #b0b8cc; }
-  .exp-margin-pct { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; }
-  .exp-margin-pct.now { color: #19c37d; }
-  .exp-margin-pct.then { color: #6b7280; }
+  .exp-margin-label { font-size: 15px; color: #475569; }
+  .exp-margin-pct { font-family: 'DM Mono', monospace; font-size: 15px; font-weight: 600; }
+  .exp-margin-pct.now { color: #16a34a; }
+  .exp-margin-pct.then { color: var(--muted); }
 
-  .exp-bar-track { background: #1e2130; border-radius: 99px; height: 8px; margin-bottom: 6px; overflow: hidden; }
+  .exp-bar-track { background: #e5e7eb; border-radius: 99px; height: 10px; margin-bottom: 8px; overflow: hidden; }
   .exp-bar-fill { height: 100%; border-radius: 99px; }
-  .exp-bar-fill.now { background: linear-gradient(90deg, #19c37d, #00d4ff); width: 21.3%; }
-  .exp-bar-fill.then { background: #2a2f3e; width: 12.8%; }
-  .exp-bar-caption { font-family: 'DM Mono', monospace; font-size: 10px; color: #6b7280; text-align: right; margin-top: 6px; }
+  .exp-bar-fill.now { background: linear-gradient(90deg, #16a34a, #3b7dd8); width: 27.0%; }
+  .exp-bar-fill.then { background: #94a3b8; width: 21.3%; }
+  .exp-bar-caption { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); text-align: right; margin-top: 8px; }
 
-  .exp-footer {
-    padding: 12px 28px;
-    border-top: 1px solid #1e2130;
+  .exp-trend-table {
+    max-width: 960px;
+    margin: 0 auto 36px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .exp-trend-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  .exp-trend-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    background: #f8f8fa;
+  }
+
+  .exp-trend-table td {
+    padding: 12px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    color: var(--text);
+  }
+
+  .exp-trend-table tr:last-child td { border-bottom: none; }
+  .exp-trend-table .highlight-row { background: rgba(22,163,74,0.03); font-weight: 600; }
+
+  .exp-footer-bar {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 16px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
-  .exp-footer-brand { font-family: 'DM Mono', monospace; font-size: 10px; color: #6b7280; }
-  .exp-footer-brand span { color: #00d4ff; }
-  .exp-caveat { font-family: 'DM Mono', monospace; font-size: 9px; color: #3a3f52; text-align: right; max-width: 200px; line-height: 1.4; }
+  .exp-footer-brand { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
+  .exp-footer-brand span { color: var(--accent); }
+  .exp-caveat { font-family: 'DM Mono', monospace; font-size: 10px; color: #94a3b8; text-align: right; max-width: 300px; line-height: 1.4; }
+
+  @media (max-width: 700px) {
+    .exp-stats-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .exp-metrics { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .exp-margin-card { padding: 20px 18px; }
+    .exp-trend-table th, .exp-trend-table td { padding: 10px 12px; font-size: 13px; }
+  }
 
   @media (max-width: 480px) {
     .vtab { padding: 8px 10px; font-size: 9px; }
-    .exp-metrics { grid-template-columns: 1fr 1fr; }
+    .exp-stats-row { grid-template-columns: 1fr; }
+    .exp-metrics { grid-template-columns: 1fr; }
+    .exp-takeaway-card { padding: 18px 16px; }
+    .exp-footer-bar { flex-direction: column; gap: 8px; text-align: center; }
+    .exp-caveat { text-align: center; max-width: none; }
   }
 </style>
 </head>
@@ -324,27 +409,27 @@
 <div id="view-analysis">
 
 <header>
-  <div class="kicker">Better Home & Finance · BETR · Earnings Transcript Analysis · Q3 2023 – Q3 2025</div>
+  <div class="kicker">Better Home & Finance · BETR · Earnings Transcript Analysis · Q3 2023 – Q4 2025</div>
   <h1>BETR: <span class="a">AI</span> Mentions &amp; <span class="b">Headcount</span> in Earnings Calls</h1>
-  <p class="subtitle">Total mentions of AI, Artificial Intelligence, Machine Learning, ML, NLP, Natural Language Processing, Generative AI, LLM, and Agentic AI across 10 quarters of earnings calls and presentations (Q3 2023 – Q3 2025). Excludes proprietary tool names (Tinman, Betsy). Includes Q3 2025 Investor Presentation.</p>
+  <p class="subtitle">Total mentions of AI, Artificial Intelligence, Machine Learning, ML, NLP, Natural Language Processing, Generative AI, LLM, and Agentic AI across 10 quarters of earnings calls and presentations (Q3 2023 – Q4 2025). Excludes proprietary tool names (Tinman, Betsy). Includes investor presentations, press releases, and 10-K filings where available.</p>
 </header>
 
 <!-- AI STATS -->
 <div class="stats-row">
   <div class="stat-card stat-a">
     <div class="stat-label">Total AI Mentions</div>
-    <div class="stat-num">342</div>
+    <div class="stat-num">447</div>
     <div class="stat-sub">AI/ML/NLP/LLM/automation combined across all 10 quarters (excl. Tinman/Betsy)</div>
   </div>
   <div class="stat-card stat-b">
     <div class="stat-label">Peak Quarter</div>
-    <div class="stat-num" style="font-size:24px">Q3 2025</div>
-    <div class="stat-sub">91 generic AI mentions — highest single quarter on record</div>
+    <div class="stat-num" style="font-size:24px">Q4 2025</div>
+    <div class="stat-sub">105 generic AI mentions — highest single quarter on record</div>
   </div>
   <div class="stat-card stat-c">
     <div class="stat-label">Betsy Launched</div>
     <div class="stat-num" style="font-size:22px">Q3 2024</div>
-    <div class="stat-sub">AI voice loan assistant; 700k+ interactions/quarter by Q3 2025</div>
+    <div class="stat-sub">AI voice loan assistant; 700k+ interactions/quarter by Q3 2025, integrated with ChatGPT via MCP in Q4 2025</div>
   </div>
 </div>
 
@@ -352,7 +437,7 @@
 <div class="section-header">
   <div class="kicker">AI Trend</div>
   <h2>AI Mentions Over Time — Generic AI vs. Tinman &amp; Betsy</h2>
-  <p>Two lines: generic AI/ML/NLP/LLM terms (blue) and Better's proprietary tools Tinman &amp; Betsy (purple). ChatGPT launched November 2022, before Better's first available transcript. Betsy launched Q3 2024 — its mentions accelerate rapidly from there. Q3 2025 combines Earnings Transcript + Investor Presentation.</p>
+  <p>Two lines: generic AI/ML/NLP/LLM terms (blue) and Better's proprietary tools Tinman &amp; Betsy (orange). ChatGPT launched November 2022, before Better's first available transcript. Betsy launched Q3 2024 — its mentions accelerate rapidly from there. Q3–Q4 2025 combine Earnings Transcript + Investor Presentation + Press Release.</p>
 </div>
 <div class="chart-wrapper">
   <canvas id="aiChart" height="320"></canvas>
@@ -368,12 +453,12 @@
   <div class="stat-card stat-a">
     <div class="stat-label">Peak Headcount</div>
     <div class="stat-num">~10,500</div>
-    <div class="stat-sub">Q4 2021 — peak before massive reduction</div>
+    <div class="stat-sub">Q4 2021 — pre-IPO peak (Better went public via SPAC in Aug 2023); stated by management in Q3 2023 earnings call</div>
   </div>
   <div class="stat-card stat-b">
-    <div class="stat-label">Q3 2023 Headcount</div>
-    <div class="stat-num">~760</div>
-    <div class="stat-sub">Explicitly stated: "approximately 760 hardworking, mission-driven employees"</div>
+    <div class="stat-label">Latest Headcount</div>
+    <div class="stat-num">1,329</div>
+    <div class="stat-sub">Q4 2025 10-K: "1,329 team members" — up from ~600 as AI platform scales with partnerships</div>
   </div>
   <div class="stat-card stat-c">
     <div class="stat-label">Betsy Impact</div>
@@ -386,14 +471,14 @@
 <div class="section-header" style="margin-top:16px;">
   <div class="kicker">Headcount Tracker</div>
   <h2>Reported &amp; Estimated Employee Count Over Time</h2>
-  <p>Figures sourced from earnings call transcripts. Q3 2023 explicitly stated "approximately 760 employees" (down from ~10,500 peak in Q4 2021). Post-Q3 2023, headcount held relatively flat as AI (Betsy, Tinman) drove efficiency gains rather than additional headcount cuts. Solid dots = explicitly stated; open dots = estimated from context.</p>
+  <p>Figures sourced from earnings call transcripts and SEC filings. 10-K confirms 1,329 team members as of Dec 31, 2025 — up from ~600 in 2024 as partnerships (NEO, Credit Karma) scale. Solid dots = explicitly stated; open dots = estimated from context.</p>
 </div>
 <div class="chart-wrapper">
   <canvas id="headcountChart" height="300"></canvas>
   <div class="legend" style="margin-top:20px">
-    <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div>Reported Headcount</div>
-    <div class="legend-item"><svg width="22" height="12" style="flex-shrink:0"><circle cx="11" cy="6" r="5" fill="none" stroke="#a78bfa" stroke-width="2"/></svg><span>Estimated</span></div>
-    <div class="legend-item"><div class="legend-dash" style="border-color:#a78bfa; border-style:dashed;"></div>Estimated trend</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--accent3)"></div>Reported Headcount</div>
+    <div class="legend-item"><svg width="22" height="12" style="flex-shrink:0"><circle cx="11" cy="6" r="5" fill="none" stroke="#7c5bbf" stroke-width="2"/></svg><span>Estimated</span></div>
+    <div class="legend-item"><div class="legend-dash" style="border-color:#7c5bbf; border-style:dashed;"></div>Estimated trend</div>
     <div class="legend-item"><div class="legend-dash"></div>ChatGPT Launch (Nov 2022)</div>
   </div>
 </div>
@@ -407,64 +492,174 @@
 
 </div><!-- /view-analysis -->
 
-<!-- EXPLAINER VIEW -->
+<!-- UNIT ECONOMICS VIEW -->
 <div id="view-explainer">
-  <div class="exp-card">
 
-    <div class="exp-takeaway">
-      <div class="exp-section-label" style="color:rgba(25,195,125,0.6)">Bottom Line</div>
-      <div class="exp-takeaway-text">
-        AI cut costs so much that Better now keeps <strong>$1,772 profit per loan — up 64% from $1,064 last quarter.</strong> They haven't seen margins like this since 2021.
-      </div>
-    </div>
+<div class="exp-header">
+  <div class="kicker">Better Home & Finance · BETR · D2C Unit Economics · Q4 2025</div>
+  <h1>BETR: <span class="a">Unit Economics</span> Per Loan Funded</h1>
+  <p class="subtitle">Marginal per-loan contribution margin for Better's direct-to-consumer channel. AI-driven efficiencies through Tinman and Betsy continue to lower operating costs while revenue per fund increases through enhanced sales and operational performance.</p>
+</div>
 
-    <div class="exp-section">
-      <div class="exp-section-label">Per Loan Funded — Q3 2025</div>
-      <div class="exp-metrics">
-        <div class="exp-metric">
-          <div class="exp-metric-label">Revenue</div>
-          <div class="exp-metric-value cyan">$8,300</div>
-          <div class="exp-metric-desc">Earned on each closed mortgage</div>
-        </div>
-        <div class="exp-metric">
-          <div class="exp-metric-label">Labor Cost</div>
-          <div class="exp-metric-value purple">−$2,500</div>
-          <div class="exp-metric-desc">Staff cost to process the loan</div>
-        </div>
-        <div class="exp-metric">
-          <div class="exp-metric-label">Customer Acquisition</div>
-          <div class="exp-metric-value purple">−$3,200</div>
-          <div class="exp-metric-desc">Marketing &amp; sales to find the borrower</div>
-        </div>
-        <div class="exp-metric">
-          <div class="exp-metric-label">Profit per Loan</div>
-          <div class="exp-metric-value green">$1,772</div>
-          <div class="exp-metric-desc">What's left over</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="exp-margin-section">
-      <div class="exp-section-label">Contribution Margin — Then vs. Now</div>
-      <div class="exp-margin-row">
-        <span class="exp-margin-label">This quarter</span>
-        <span class="exp-margin-pct now">21.3%</span>
-      </div>
-      <div class="exp-bar-track"><div class="exp-bar-fill now"></div></div>
-      <div class="exp-margin-row" style="margin-top:10px">
-        <span class="exp-margin-label">Last quarter</span>
-        <span class="exp-margin-pct then">12.8%</span>
-      </div>
-      <div class="exp-bar-track"><div class="exp-bar-fill then"></div></div>
-      <div class="exp-bar-caption">↑ 64% improvement quarter-over-quarter</div>
-    </div>
-
-    <div class="exp-footer">
-      <div class="exp-footer-brand"><span>BETR</span> · Better Home &amp; Finance · Q3 2025</div>
-      <div class="exp-caveat">Contribution margin ≠ net profit. Corporate overhead not included.</div>
-    </div>
-
+<!-- Bottom Line -->
+<div class="exp-takeaway-card">
+  <div class="exp-section-label" style="color:rgba(22,163,74,0.7)">Bottom Line</div>
+  <div class="exp-takeaway-text">
+    AI cut costs so much that Better now keeps <strong>$2,270 profit per loan — up 28% from $1,772 last quarter.</strong> The best contribution margins since inception, driven by Tinman automation and Betsy reducing sales and ops labor costs.
   </div>
+</div>
+
+<!-- Q4 2025 Waterfall -->
+<div class="exp-breakdown">
+  <div class="section-header" style="margin-bottom:16px">
+    <div class="kicker">Q4 2025 Waterfall</div>
+    <h2 style="font-size:20px;font-weight:700;margin-bottom:4px">How Each D2C Loan Gets to $2,270 Profit</h2>
+    <p style="font-size:13px;color:var(--muted);line-height:1.6">Revenue flows down through costs to contribution margin. All figures per funded loan.</p>
+  </div>
+  <div class="exp-metrics" style="grid-template-columns: repeat(3, 1fr);">
+    <div class="exp-metric">
+      <div class="exp-metric-label">Gross Gain on Sale</div>
+      <div class="exp-metric-value default">$9,105</div>
+      <div class="exp-metric-desc">Revenue before concessions</div>
+    </div>
+    <div class="exp-metric">
+      <div class="exp-metric-label">Concessions</div>
+      <div class="exp-metric-value purple">−$1,207</div>
+      <div class="exp-metric-desc">Pricing adjustments to win loans</div>
+    </div>
+    <div class="exp-metric">
+      <div class="exp-metric-label">Net GOS Revenue</div>
+      <div class="exp-metric-value default">$7,898</div>
+      <div class="exp-metric-desc">$9,105 − $1,207</div>
+    </div>
+  </div>
+  <div style="text-align:center;color:var(--muted);font-size:20px;margin:8px 0">↓ <span style="font-family:'DM Mono',monospace;font-size:11px;vertical-align:middle">+ $500 net mortgage interest</span> ↓</div>
+  <div class="exp-metrics">
+    <div class="exp-metric">
+      <div class="exp-metric-label">Total Revenue / Loan</div>
+      <div class="exp-metric-value default">$8,398</div>
+      <div class="exp-metric-desc">Net GOS + mortgage interest income</div>
+    </div>
+    <div class="exp-metric">
+      <div class="exp-metric-label">Labor Cost</div>
+      <div class="exp-metric-value purple">−$2,422</div>
+      <div class="exp-metric-desc">Sales ($1,567) + Ops ($856)</div>
+    </div>
+    <div class="exp-metric">
+      <div class="exp-metric-label">Data Costs</div>
+      <div class="exp-metric-value purple">−$831</div>
+      <div class="exp-metric-desc">Credit, appraisal &amp; third-party</div>
+    </div>
+    <div class="exp-metric">
+      <div class="exp-metric-label">Customer Acquisition</div>
+      <div class="exp-metric-value purple">−$2,874</div>
+      <div class="exp-metric-desc">Marketing &amp; sales (excl. brand)</div>
+    </div>
+  </div>
+  <div style="text-align:center;color:var(--muted);font-size:20px;margin:8px 0">↓</div>
+  <div class="exp-metrics" style="grid-template-columns: 1fr;">
+    <div class="exp-metric" style="text-align:center;border-color:rgba(22,163,74,0.3);background:rgba(22,163,74,0.03)">
+      <div class="exp-metric-label">Contribution Margin / Loan</div>
+      <div class="exp-metric-value green" style="font-size:36px">$2,270</div>
+      <div class="exp-metric-desc">27.0% margin — best since inception</div>
+    </div>
+  </div>
+</div>
+
+<!-- Unit Economics Chart -->
+<div class="exp-breakdown">
+  <div class="section-header" style="margin-bottom:16px">
+    <div class="kicker">Quarterly Progression</div>
+    <h2 style="font-size:20px;font-weight:700;margin-bottom:4px">Unit Economics Over Time — 2025</h2>
+    <p style="font-size:13px;color:var(--muted);line-height:1.6">Contribution margin per loan grew 354% from Q1 to Q4 2025 as AI-driven efficiencies reduced labor costs and revenue per fund increased. Stacked bars show cost components; the green line tracks profit per loan.</p>
+  </div>
+</div>
+<div class="chart-wrapper" style="max-width:960px">
+  <canvas id="unitEconChart" height="340"></canvas>
+  <div class="legend" style="margin-top:20px">
+    <div class="legend-item"><div class="legend-dot" style="background:#7c5bbf"></div>Labor Cost</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e07a3a"></div>CAC</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#94a3b8"></div>Data Costs</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#16a34a"></div>Contribution Margin</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#3b7dd8"></div>Total Revenue</div>
+  </div>
+</div>
+
+<!-- Margin Comparison -->
+<div class="exp-margin-card">
+  <div class="exp-section-label">Contribution Margin — Quarter over Quarter</div>
+  <div class="exp-margin-row">
+    <span class="exp-margin-label">Q4 2025 (this quarter)</span>
+    <span class="exp-margin-pct now">27.0%</span>
+  </div>
+  <div class="exp-bar-track"><div class="exp-bar-fill now"></div></div>
+  <div class="exp-margin-row" style="margin-top:14px">
+    <span class="exp-margin-label">Q3 2025 (last quarter)</span>
+    <span class="exp-margin-pct then">21.4%</span>
+  </div>
+  <div class="exp-bar-track"><div class="exp-bar-fill then"></div></div>
+  <div class="exp-bar-caption">↑ 28% improvement quarter-over-quarter</div>
+</div>
+
+<!-- Quarterly Trend Table -->
+<div class="exp-trend-table">
+  <div style="padding:20px 20px 0"><div class="exp-section-label">Quarterly Trend — 2025</div></div>
+  <table>
+    <thead>
+      <tr>
+        <th>Metric</th>
+        <th>Q1 2025</th>
+        <th>Q2 2025</th>
+        <th>Q3 2025</th>
+        <th>Q4 2025</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Loan Units</td>
+        <td>2,196</td>
+        <td>2,974</td>
+        <td>2,939</td>
+        <td>2,946</td>
+      </tr>
+      <tr>
+        <td>Total Mortgage Revenue</td>
+        <td>$7,233</td>
+        <td>$7,886</td>
+        <td>$8,268</td>
+        <td>$8,398</td>
+      </tr>
+      <tr>
+        <td>Labor Cost / Fund</td>
+        <td>$2,927</td>
+        <td>$2,493</td>
+        <td>$2,511</td>
+        <td>$2,422</td>
+      </tr>
+      <tr>
+        <td>CAC / Fund</td>
+        <td>$2,606</td>
+        <td>$3,498</td>
+        <td>$3,151</td>
+        <td>$2,874</td>
+      </tr>
+      <tr class="highlight-row">
+        <td>Contribution Margin / Fund</td>
+        <td>$500</td>
+        <td>$1,064</td>
+        <td>$1,772</td>
+        <td style="color:#16a34a">$2,270</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Footer -->
+<div class="exp-footer-bar">
+  <div class="exp-footer-brand"><span>BETR</span> · Better Home &amp; Finance · Q4 2025 Investor Presentation</div>
+  <div class="exp-caveat">Contribution margin ≠ net profit. Corporate overhead, depreciation, stock-based compensation, and restructuring charges not included. D2C channel only.</div>
+</div>
+
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -473,7 +668,7 @@
 const QS = [
   'Q3 2023','Q4 2023',
   'Q1 2024','Q2 2024','Q3 2024','Q4 2024',
-  'Q1 2025','Q2 2025','Q3 2025'
+  'Q1 2025','Q2 2025','Q3 2025','Q4 2025'
 ];
 
 // AI mention counts EXCLUDING Tinman and Betsy — from exact text extraction
@@ -488,7 +683,8 @@ const QS = [
 // Q1 2025: AI=55, LLM=1, automatically=4, automate=1 → 61
 // Q2 2025: AI=74, machine learning=2, agentic=1, automate=1 → 78
 // Q3 2025: AI=81, agentic=2, machine learning=1, generative AI=1, LLM=1, automate=3, automation=1, automated=1 → 91
-const COUNTS = [6, 9, 3, 22, 15, 57, 61, 78, 91];
+// Q4 2025: AI=88, automation=8, MCP=2, ChatGPT=7 → 105 (transcript + investor pres + press release)
+const COUNTS = [6, 9, 3, 22, 15, 57, 61, 78, 91, 105];
 
 // Tinman + Betsy mention counts — exact text extraction
 // Q3 2023: Tinman=17 → 17
@@ -500,7 +696,8 @@ const COUNTS = [6, 9, 3, 22, 15, 57, 61, 78, 91];
 // Q1 2025: Tinman=33, Betsy=5 → 38
 // Q2 2025: Tinman=48, Betsy=22 → 70
 // Q3 2025: TinMan=45+Tinman=31+tinman=1+Tin Man=2=79, Betsy=32 → 111
-const TINMAN_BETSY_COUNTS = [17, 10, 5, 7, 34, 57, 38, 70, 111];
+// Q4 2025: Tinman=120, Betsy=8 → 128 (transcript + investor pres + press release + 10-K)
+const TINMAN_BETSY_COUNTS = [17, 10, 5, 7, 34, 57, 38, 70, 111, 128];
 
 // ChatGPT launch was Nov 2022, before Q3 2023. Show as a marker before Q3 2023 (index -0.5)
 const CHATGPT_IDX = -0.5;
@@ -567,6 +764,14 @@ const AI_CTX = {
     "AI-driven execution: lead-to-lock conversion +84% to 6.1% since Betsy launched in July 2024. D2C unit economics: labor cost per fund ~$2,500, contribution profit per loan ~$1,772 (vs $1,064 in Q2).",
     "These additional partnerships will add 10 million American homeowners to whom we can algorithmically qualify and market products. All of these events validate our strategy as our AI-driven platforms, Betsy and TinMan, deliver the lowest unit costs in the industry.",
     "(Q3 2025 Investor Presentation) Betsy quarterly customer interactions: Q4 2024: 219k → Q1 2025: 325k → Q2 2025: 600k → Q3 2025: 700k. Contribution margin continues to expand as AI-driven efficiencies lower the operating cost to fund."
+  ],
+  'Q4 2025': [
+    "Better is a vertical AI platform fundamentally reshaping and revolutionizing the home finance industry. We are building the AI-native frontier of consumer finance, enabling players with massive customer bases to provide mortgages and HELOCs in an AI-first way to their customers.",
+    "We announced a major milestone, the launch of the first conversational credit decision engine for mortgages and home equity loans integrated directly into ChatGPT through our Tinman AI app. Tinman can instantly underwrite approximately 95% of mortgage and home equity loan types, powered by our proprietary MCP technology.",
+    "Our Tinman AI platform generated $646 million in volume in the fourth quarter, representing over 40% of total volume and surpassing our prior guidance of $600 million. In 2025, we grew total funded loan volume to $4.7 billion with 35% coming from our Tinman AI platform.",
+    "On operational costs, Tinman automates up to 80% of the repetitive loan production tasks, and our Betsy tool resolves underwriting issues instantly by pulling LoanFacts guidelines and crafting communications in seconds. Our cost to process, underwrite, and close a loan is about $800 — far less than anyone else in the industry.",
+    "We have integrated AI across every part of our sales and operations workflow. Our loan contribution margin improved 28% quarter-over-quarter from approximately $1,800 to approximately $2,300 per loan. (10-K: As of December 31, 2025, we had approximately 1,329 team members.)",
+    "(Investor Presentation) D2C contribution margin per fund reached $2,270 in Q4 2025, up from $1,772 in Q3 2025 and $500 in Q1 2025. NEO funded loans per mortgage advisor increased from 2.4 to 4.6 after joining Tinman. 28 new branches joined the Tinman AI Platform in 2025."
   ]
 };
 
@@ -574,8 +779,12 @@ const AI_CTX = {
 const aiCtx = document.getElementById('aiChart').getContext('2d');
 
 const aiGradient = aiCtx.createLinearGradient(0, 0, 0, 400);
-aiGradient.addColorStop(0, 'rgba(0,212,255,0.25)');
-aiGradient.addColorStop(1, 'rgba(0,212,255,0.0)');
+aiGradient.addColorStop(0, 'rgba(59,125,216,0.18)');
+aiGradient.addColorStop(1, 'rgba(59,125,216,0.0)');
+
+const tbGradient = aiCtx.createLinearGradient(0, 0, 0, 400);
+tbGradient.addColorStop(0, 'rgba(224,122,58,0.12)');
+tbGradient.addColorStop(1, 'rgba(224,122,58,0.0)');
 
 const aiChart = new Chart(aiCtx, {
   type: 'line',
@@ -585,11 +794,11 @@ const aiChart = new Chart(aiCtx, {
       {
         label: 'AI Mentions',
         data: COUNTS,
-        borderColor: '#00d4ff',
+        borderColor: '#3b7dd8',
         borderWidth: 2.5,
         backgroundColor: aiGradient,
-        pointBackgroundColor: '#00d4ff',
-        pointBorderColor: '#00d4ff',
+        pointBackgroundColor: '#3b7dd8',
+        pointBorderColor: '#3b7dd8',
         pointRadius: 5,
         pointHoverRadius: 7,
         tension: 0.35,
@@ -598,15 +807,15 @@ const aiChart = new Chart(aiCtx, {
       {
         label: 'Tinman & Betsy',
         data: TINMAN_BETSY_COUNTS,
-        borderColor: '#a78bfa',
+        borderColor: '#e07a3a',
         borderWidth: 2.5,
-        backgroundColor: 'transparent',
-        pointBackgroundColor: '#a78bfa',
-        pointBorderColor: '#a78bfa',
+        backgroundColor: tbGradient,
+        pointBackgroundColor: '#e07a3a',
+        pointBorderColor: '#e07a3a',
         pointRadius: 5,
         pointHoverRadius: 7,
         tension: 0.35,
-        fill: false
+        fill: true
       }
     ]
   },
@@ -616,11 +825,11 @@ const aiChart = new Chart(aiCtx, {
     plugins: {
       legend: { display: false },
       tooltip: {
-        backgroundColor: '#12141a',
-        borderColor: '#1e2130',
+        backgroundColor: '#ffffff',
+        borderColor: '#e5e7eb',
         borderWidth: 1,
-        titleColor: '#e8eaf0',
-        bodyColor: '#b0b8cc',
+        titleColor: '#1e293b',
+        bodyColor: '#475569',
         titleFont: { family: 'DM Mono', size: 12 },
         bodyFont: { family: 'DM Mono', size: 12 },
         callbacks: {
@@ -633,9 +842,9 @@ const aiChart = new Chart(aiCtx, {
     },
     scales: {
       x: {
-        grid: { color: '#1a1d28' },
+        grid: { color: 'rgba(0,0,0,0.06)' },
         ticks: {
-          color: '#6b7280',
+          color: '#64748b',
           font: { family: 'DM Mono', size: 10 },
           maxRotation: 45,
           autoSkip: true,
@@ -643,9 +852,9 @@ const aiChart = new Chart(aiCtx, {
         }
       },
       y: {
-        grid: { color: '#1a1d28' },
+        grid: { color: 'rgba(0,0,0,0.06)' },
         ticks: {
-          color: '#6b7280',
+          color: '#64748b',
           font: { family: 'DM Mono', size: 11 },
           maxTicksLimit: 6
         },
@@ -671,14 +880,14 @@ Chart.register({
     if (x < xScale.left) return;
 
     ctx2.save();
-    ctx2.fillStyle = '#19c37d';
+    ctx2.fillStyle = '#16a34a';
     ctx2.font = '10px DM Mono, monospace';
     ctx2.textAlign = 'center';
     const lY1 = yTop + 14, lY2 = yTop + 26;
     ctx2.fillText('ChatGPT', x, lY1);
     ctx2.fillText('Launches', x, lY2);
     ctx2.setLineDash([6, 4]);
-    ctx2.strokeStyle = '#19c37d';
+    ctx2.strokeStyle = '#16a34a';
     ctx2.lineWidth = 1.5;
     ctx2.beginPath();
     ctx2.moveTo(x, lY2 + 6);
@@ -700,6 +909,7 @@ aiChart.update();
 // Q1 2025: ~550 (stable, Betsy at 127k interactions/month; NEO scaling)
 // Q2 2025: ~550-600 (Betsy 600k interactions/quarter; AI underwriting 43% of loans)
 // Q3 2025: ~600 (Betsy 700k interactions/quarter; new partnerships scaling volume)
+// Q4 2025: 1,329 — 10-K states "approximately 1,329 team members" as of Dec 31, 2025
 const HC_DATA = [
   { y: 760,  stated: true  },   // Q3 2023: explicitly stated "approximately 760 employees"
   { y: 775,  stated: false },   // Q4 2023: stable, small growth possible
@@ -710,12 +920,13 @@ const HC_DATA = [
   { y: 540,  stated: false },   // Q1 2025: stable post-Betsy
   { y: 560,  stated: false },   // Q2 2025: stable with AI efficiency scaling
   { y: 600,  stated: false },   // Q3 2025: some growth as partnerships add volume
+  { y: 1329, stated: true  },   // Q4 2025: 10-K states "approximately 1,329 team members"
 ];
 
 const hcCtx = document.getElementById('headcountChart').getContext('2d');
 const hcGradient = hcCtx.createLinearGradient(0, 0, 0, 360);
-hcGradient.addColorStop(0, 'rgba(167,139,250,0.22)');
-hcGradient.addColorStop(1, 'rgba(167,139,250,0.0)');
+hcGradient.addColorStop(0, 'rgba(124,91,191,0.15)');
+hcGradient.addColorStop(1, 'rgba(124,91,191,0.0)');
 
 const headcountChart = new Chart(hcCtx, {
   type: 'line',
@@ -724,11 +935,11 @@ const headcountChart = new Chart(hcCtx, {
     datasets: [{
       label: 'Headcount',
       data: HC_DATA.map(d => d.y),
-      borderColor: '#a78bfa',
+      borderColor: '#7c5bbf',
       borderWidth: 2.5,
       backgroundColor: hcGradient,
-      pointBackgroundColor: HC_DATA.map(d => d.stated ? '#a78bfa' : 'transparent'),
-      pointBorderColor: '#a78bfa',
+      pointBackgroundColor: HC_DATA.map(d => d.stated ? '#7c5bbf' : 'transparent'),
+      pointBorderColor: '#7c5bbf',
       pointBorderWidth: 2,
       pointRadius: 5,
       pointHoverRadius: 7,
@@ -745,11 +956,11 @@ const headcountChart = new Chart(hcCtx, {
     plugins: {
       legend: { display: false },
       tooltip: {
-        backgroundColor: '#12141a',
-        borderColor: '#1e2130',
+        backgroundColor: '#ffffff',
+        borderColor: '#e5e7eb',
         borderWidth: 1,
-        titleColor: '#e8eaf0',
-        bodyColor: '#b0b8cc',
+        titleColor: '#1e293b',
+        bodyColor: '#475569',
         titleFont: { family: 'DM Mono', size: 12 },
         bodyFont: { family: 'DM Mono', size: 12 },
         callbacks: {
@@ -762,9 +973,9 @@ const headcountChart = new Chart(hcCtx, {
     },
     scales: {
       x: {
-        grid: { color: '#1a1d28' },
+        grid: { color: 'rgba(0,0,0,0.06)' },
         ticks: {
-          color: '#6b7280',
+          color: '#64748b',
           font: { family: 'DM Mono', size: 10 },
           maxRotation: 45,
           autoSkip: true,
@@ -772,16 +983,16 @@ const headcountChart = new Chart(hcCtx, {
         }
       },
       y: {
-        grid: { color: '#1a1d28' },
+        grid: { color: 'rgba(0,0,0,0.06)' },
         ticks: {
-          color: '#6b7280',
+          color: '#64748b',
           font: { family: 'DM Mono', size: 11 },
           callback: v => v >= 1000 ? (v/1000).toFixed(1)+'k' : v,
           maxTicksLimit: 7
         },
         beginAtZero: false,
         suggestedMin: 400,
-        suggestedMax: 1000
+        suggestedMax: 1500
       }
     }
   }
@@ -831,12 +1042,124 @@ function buildCards() {
 
 function highlight(text) {
   return text.replace(
-    /\b(AI|artificial intelligence|machine learning|ML|NLP|natural language processing|natural language|generative AI|AI-driven|AI-enabled|AI-powered|AI-native|AI-first|AI-fueled|agentic AI|agentic|LLM|large language model|deep learning|neural network|autonomous|autonomously)\b/gi,
+    /\b(AI|artificial intelligence|machine learning|ML|NLP|natural language processing|natural language|generative AI|AI-driven|AI-enabled|AI-powered|AI-native|AI-first|AI-fueled|agentic AI|agentic|LLM|large language model|deep learning|neural network|autonomous|autonomously|MCP|ChatGPT)\b/gi,
     m => `<mark>${m}</mark>`
   );
 }
 
 buildCards();
+
+// ── UNIT ECONOMICS CHART ──────────────────────────────────────────────────
+const UE_QS = ['Q1 2025', 'Q2 2025', 'Q3 2025', 'Q4 2025'];
+const UE_REVENUE  = [7233, 7886, 8268, 8398];
+const UE_LABOR    = [2927, 2493, 2511, 2422];
+const UE_CAC      = [2606, 3498, 3151, 2874];
+const UE_DATA     = [1200, 831, 831, 831];
+const UE_MARGIN   = [500, 1064, 1772, 2270];
+
+const ueCtx = document.getElementById('unitEconChart').getContext('2d');
+
+const ueMarginGradient = ueCtx.createLinearGradient(0, 0, 0, 400);
+ueMarginGradient.addColorStop(0, 'rgba(22,163,74,0.25)');
+ueMarginGradient.addColorStop(1, 'rgba(22,163,74,0.0)');
+
+const unitEconChart = new Chart(ueCtx, {
+  type: 'bar',
+  data: {
+    labels: UE_QS,
+    datasets: [
+      {
+        label: 'Labor Cost',
+        data: UE_LABOR,
+        backgroundColor: 'rgba(124,91,191,0.75)',
+        borderColor: '#7c5bbf',
+        borderWidth: 1,
+        borderRadius: 4,
+        stack: 'costs'
+      },
+      {
+        label: 'CAC',
+        data: UE_CAC,
+        backgroundColor: 'rgba(224,122,58,0.75)',
+        borderColor: '#e07a3a',
+        borderWidth: 1,
+        borderRadius: 4,
+        stack: 'costs'
+      },
+      {
+        label: 'Data Costs',
+        data: UE_DATA,
+        backgroundColor: 'rgba(148,163,184,0.6)',
+        borderColor: '#94a3b8',
+        borderWidth: 1,
+        borderRadius: 4,
+        stack: 'costs'
+      },
+      {
+        label: 'Contribution Margin',
+        data: UE_MARGIN,
+        backgroundColor: 'rgba(22,163,74,0.75)',
+        borderColor: '#16a34a',
+        borderWidth: 1,
+        borderRadius: 4,
+        stack: 'costs'
+      },
+      {
+        label: 'Total Revenue',
+        data: UE_REVENUE,
+        type: 'line',
+        borderColor: '#3b7dd8',
+        borderWidth: 2.5,
+        pointBackgroundColor: '#3b7dd8',
+        pointBorderColor: '#3b7dd8',
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        tension: 0.3,
+        fill: false,
+        yAxisID: 'y'
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#ffffff',
+        borderColor: '#e5e7eb',
+        borderWidth: 1,
+        titleColor: '#1e293b',
+        bodyColor: '#475569',
+        titleFont: { family: 'DM Mono', size: 12 },
+        bodyFont: { family: 'DM Mono', size: 12 },
+        callbacks: {
+          label: c => ` ${c.dataset.label}: $${c.parsed.y.toLocaleString()}`
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(0,0,0,0.04)' },
+        ticks: {
+          color: '#64748b',
+          font: { family: 'DM Mono', size: 11 }
+        },
+        stacked: true
+      },
+      y: {
+        grid: { color: 'rgba(0,0,0,0.06)' },
+        ticks: {
+          color: '#64748b',
+          font: { family: 'DM Mono', size: 11 },
+          callback: v => '$' + (v/1000).toFixed(0) + 'k'
+        },
+        stacked: true,
+        beginAtZero: true
+      }
+    }
+  }
+});
 
 function switchView(view) {
   const analysis = document.getElementById('view-analysis');
